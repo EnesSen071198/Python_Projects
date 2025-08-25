@@ -1,0 +1,14 @@
+Yüklenmesi gerekenler:
+1. PYTHON
+2. GIT
+3. PYCHARM
+
+---
+
+Pycharm terminal kodları:
+1. git clone https://github.com/browser-use/web-ui.git
+2. cd .\web-ui\
+3. pip install -r requirements.txt
+4. pip install lxml_html_clean
+5. playwright install
+6. python webui.py --ip 127.0.0.1 --port 7788

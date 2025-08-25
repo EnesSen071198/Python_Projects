@@ -1,0 +1,7 @@
+streamlit==1.48.0
+pandas>=2.2.2,<3
+numpy>=1.26,<3
+scikit-learn>=1.4,<2
+requests>=2.31,<3
+# Optional: if installed, app will use it for SVD collaborative filtering
+# scikit-surprise==1.1.3

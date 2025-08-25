@@ -1,0 +1,261 @@
+"""
+Python Mülakat Soruları ve Çözümleri
+Her soru için veri yapıları ve algoritmaların seçim nedenleri açıklanmıştır.
+"""
+
+# 1. Bir listedeki tekrar eden elemanları bulma
+def tekrar_eden_elemanlar(liste):
+    """
+    Bir listedeki tekrar eden elemanları bulur
+    
+    Veri Yapıları:
+    - Liste: Giriş verisi için kullanılır çünkü sıralı ve değiştirilebilir bir yapı gerekli
+    - Sözlük (dict): Eleman sayılarını tutmak için kullanılır çünkü:
+        * Anahtar-değer ilişkisi gerekli (eleman: sayısı)
+        * O(1) zamanda erişim ve güncelleme sağlar
+        * Bellek kullanımı açısından verimli
+    
+    Zaman Karmaşıklığı: O(n) - tek geçişte sayma yapılır
+    Örnek: [1,2,3,2,4,1] -> [1,2]
+    """
+    tekrarlar = []  # Sonuç için boş liste
+    sayac = {}      # Eleman sayılarını tutacak sözlük
+    
+    # Her elemanın sayısını say - O(n)
+    for eleman in liste:
+        # get() metodu ile varsayılan değer 0 kullanarak daha temiz kod
+        sayac[eleman] = sayac.get(eleman, 0) + 1
+    
+    # Birden fazla geçenleri bul - O(n)
+    for eleman, adet in sayac.items():
+        if adet > 1:
+            tekrarlar.append(eleman)
+    
+    return tekrarlar
+
+# 2. Bir string'i tersine çevirme (3 farklı yöntem)
+def string_terse_cevir(metin):
+    """
+    Bir metni tersine çevirir
+    
+    Üç farklı yöntem kullanılarak çözülmüştür:
+    1. Dilimleme [::-1]: 
+       - En pythonic ve performanslı yöntem
+       - Tek satırda çözüm
+       - C seviyesinde optimize edilmiş
+    
+    2. reversed() ve join():
+       - Bellek kullanımı açısından verimli
+       - İteratör kullanarak büyük stringler için uygun
+    
+    3. Manuel döngü:
+       - Algoritmanın nasıl çalıştığını göstermek için
+       - Diğer dillerde nasıl yapılacağını anlamak için
+    
+    Zaman Karmaşıklığı: Her üç yöntem için O(n)
+    Örnek: "Python" -> "nohtyP"
+    """
+    # 1. Yöntem: Dilimleme - En hızlı yöntem
+    ters1 = metin[::-1]
+    
+    # 2. Yöntem: reversed ve join - Bellek dostu
+    ters2 = ''.join(reversed(metin))
+    
+    # 3. Yöntem: Manuel çevirme - Eğitim amaçlı
+    ters3 = ''
+    for i in range(len(metin)-1, -1, -1):
+        ters3 += metin[i]
+    
+    return ters1, ters2, ters3
+
+# 3. Palindrom kontrolü
+def palindrom_mu(metin):
+    """
+    Bir metnin palindrom olup olmadığını kontrol eder
+    
+    Algoritma Adımları:
+    1. Metni normalize etme:
+       - Boşlukları kaldırma: Örn. "race car" -> "racecar"
+       - Küçük harfe çevirme: Büyük/küçük harf duyarlılığını kaldırma
+    
+    2. Karşılaştırma:
+       - [::-1] dilimleme kullanarak ters çevirme
+       - Orijinal metin ile karşılaştırma
+    
+    Not: İki pointer yaklaşımı da kullanılabilirdi ancak Python'da
+    dilimleme daha verimli ve okunabilir
+    
+    Zaman Karmaşıklığı: O(n)
+    Örnek: "kayak" -> True, "python" -> False
+    """
+    # Boşlukları kaldır ve küçük harfe çevir
+    metin = metin.replace(" ", "").lower()
+    return metin == metin[::-1]
+
+# 4. Fibonacci serisi oluşturma
+def fibonacci(n):
+    """
+    n elemanlı Fibonacci serisi oluşturur
+    
+    Veri Yapısı:
+    - Liste kullanılır çünkü:
+        * Sıralı elemanlar gerekli
+        * Dinamik büyüme gerekli
+        * Son iki elemana sürekli erişim gerekli
+    
+    Alternatif Yaklaşımlar:
+    1. Recursive çözüm yapılabilirdi ancak:
+       - Büyük n değerleri için stack overflow riski
+       - Daha fazla bellek kullanımı
+    
+    2. Generator kullanılabilirdi:
+       - Bellek açısından daha verimli
+       - Ancak tüm listeye ihtiyaç olduğu için tercih edilmedi
+    
+    Zaman Karmaşıklığı: O(n)
+    Örnek: n=5 -> [0,1,1,2,3]
+    """
+    # Kenar durumları kontrol et
+    if n <= 0:
+        return []
+    elif n == 1:
+        return [0]
+    
+    # İlk iki elemanı ekle
+    fib = [0, 1]
+    
+    # Kalan elemanları hesapla
+    while len(fib) < n:
+        fib.append(fib[-1] + fib[-2])
+    return fib
+
+# 5. İki liste arasındaki ortak elemanları bulma
+def ortak_elemanlar(liste1, liste2):
+    """
+    İki liste arasındaki ortak elemanları bulur
+    
+    Veri Yapısı:
+    - Set (Küme) kullanılır çünkü:
+        * Tekrar eden elemanları otomatik eler
+        * O(1) zamanda arama yapılabilir
+        * Kesişim işlemi (intersection) çok verimli
+    
+    Alternatif Yaklaşım:
+    - İç içe döngülerle de yapılabilirdi ancak:
+        * O(n*m) zaman karmaşıklığı olurdu
+        * Kod daha uzun ve karmaşık olurdu
+    
+    Zaman Karmaşıklığı: O(n+m) - n ve m liste uzunlukları
+    Örnek: [1,2,3], [2,3,4] -> [2,3]
+    """
+    # Set kullanarak kesişim bulma
+    return list(set(liste1) & set(liste2))
+
+# 6. Bir sayının asal olup olmadığını kontrol etme
+def asal_mi(sayi):
+    """
+    Bir sayının asal olup olmadığını kontrol eder
+    """
+    if sayi < 2:
+        return False
+    for i in range(2, int(sayi ** 0.5) + 1):
+        if sayi % i == 0:
+            return False
+    return True
+
+# 7. Liste içindeki en büyük ikinci sayıyı bulma
+def ikinci_buyuk(liste):
+    """
+    Listedeki en büyük ikinci sayıyı bulur
+    Örnek: [5,2,8,1,9] -> 8
+    """
+    if len(liste) < 2:
+        return None
+    
+    # Tekrar edenleri kaldır ve sırala
+    farkli = list(set(liste))
+    farkli.sort(reverse=True)
+    
+    return farkli[1] if len(farkli) >= 2 else None
+
+# 8. Verilen bir sayının faktöriyelini hesaplama
+def faktoriyel(n):
+    """
+    Bir sayının faktöriyelini hesaplar
+    Örnek: 5 -> 120
+    """
+    # Recursive (Özyinelemeli) çözüm
+    if n == 0 or n == 1:
+        return 1
+    return n * faktoriyel(n-1)
+
+# 9. String içindeki karakterlerin frekansını bulma
+def karakter_frekansi(metin):
+    """
+    String içindeki her karakterin kaç kez geçtiğini bulur
+    Örnek: "python" -> {'p':1, 'y':1, 't':1, 'h':1, 'o':1, 'n':1}
+    """
+    frekans = {}
+    for karakter in metin:
+        frekans[karakter] = frekans.get(karakter, 0) + 1
+    return frekans
+
+# 10. Liste içindeki elemanları sıralama (Bubble Sort)
+def bubble_sort(liste):
+    """
+    Listeyi bubble sort algoritması ile sıralar
+    """
+    n = len(liste)
+    for i in range(n):
+        for j in range(0, n-i-1):
+            if liste[j] > liste[j+1]:
+                liste[j], liste[j+1] = liste[j+1], liste[j]
+    return liste
+
+# Test fonksiyonu
+def test_sorular():
+    """Tüm soruların test edilmesi"""
+    # 1. Tekrar eden elemanlar
+    print("1. Tekrar eden elemanlar:")
+    print(tekrar_eden_elemanlar([1,2,3,2,4,1]))  # [1,2]
+    
+    # 2. String tersine çevirme
+    print("\n2. String tersine çevirme:")
+    print(string_terse_cevir("Python"))  # ('nohtyP', 'nohtyP', 'nohtyP')
+    
+    # 3. Palindrom kontrolü
+    print("\n3. Palindrom kontrolü:")
+    print(palindrom_mu("kayak"))  # True
+    print(palindrom_mu("python"))  # False
+    
+    # 4. Fibonacci serisi
+    print("\n4. Fibonacci serisi:")
+    print(fibonacci(5))  # [0,1,1,2,3]
+    
+    # 5. Ortak elemanlar
+    print("\n5. Ortak elemanlar:")
+    print(ortak_elemanlar([1,2,3], [2,3,4]))  # [2,3]
+    
+    # 6. Asal sayı kontrolü
+    print("\n6. Asal sayı kontrolü:")
+    print(asal_mi(17))  # True
+    print(asal_mi(4))   # False
+    
+    # 7. İkinci büyük sayı
+    print("\n7. İkinci büyük sayı:")
+    print(ikinci_buyuk([5,2,8,1,9]))  # 8
+    
+    # 8. Faktöriyel
+    print("\n8. Faktöriyel:")
+    print(faktoriyel(5))  # 120
+    
+    # 9. Karakter frekansı
+    print("\n9. Karakter frekansı:")
+    print(karakter_frekansi("python"))
+    
+    # 10. Bubble sort
+    print("\n10. Bubble sort:")
+    print(bubble_sort([64, 34, 25, 12, 22, 11, 90]))
+
+if __name__ == "__main__":
+    test_sorular()
